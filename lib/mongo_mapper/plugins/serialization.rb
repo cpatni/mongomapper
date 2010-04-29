@@ -8,6 +8,12 @@ module MongoMapper
       end
       
       module InstanceMethods
+        def to_xml(options = {}, &block)
+          options[:dasherize] = false unless options.has_key?(:dasherize)
+          serializer = Serialization::XmlSerializer.new(self, options)
+          block_given? ? serializer.to_s(&block) : serializer.to_s
+        end
+        
         def as_json options={}
           options ||= {}
           unless options[:only]
@@ -68,8 +74,18 @@ module MongoMapper
         def from_json(json)
           self.new(ActiveSupport::JSON.decode(json))
         end
+        
+        def from_xml(xml)
+          # instance = self.new
+          # instance.attributes = self.new
+          # instance
+          instance.attributes = self.new(Hash.from_xml(xml).values.first)
+        end        
       end
 
     end
   end
 end
+
+require 'mongo_mapper/plugins/serialization/xml_serializer'
+require 'mongo_mapper/plugins/serialization/array'
