@@ -1,6 +1,6 @@
 = MongoMapper
 
-A Ruby Object Mapper for Mongo.
+A Ruby Object Mapper for Mongo. mongo_mapper_ign gem includes support for xml serialization
 
 Releases are tagged on github and released on gemcutter. Master is pushed to whenever I add a patch or a new feature, but I do not release a new gem version each time I push.
 
@@ -15,6 +15,10 @@ Releases are tagged on github and released on gemcutter. Master is pushed to whe
 == Install
 
  $ gem install mongo_mapper
+
+== Config Rails environment.rb
+
+ config.gem "mongo_mapper_ign", :lib => "mongo_mapper"
 
 == Problems or Questions?
 

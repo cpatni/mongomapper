@@ -5,11 +5,11 @@ require 'jeweler'
 require File.dirname(__FILE__) + '/lib/mongo_mapper/version'
 
 Jeweler::Tasks.new do |gem|
-  gem.name        = "mongo_mapper"
-  gem.summary     = %Q{A Ruby Object Mapper for Mongo}
-  gem.email       = "nunemaker@gmail.com"
-  gem.homepage    = "http://github.com/jnunemaker/mongomapper"
-  gem.authors     = ["John Nunemaker"]
+  gem.name        = "mongo_mapper_ign"
+  gem.summary     = %Q{A Ruby Object Mapper for Mongo including support for XML serialization}
+  gem.email       = "nunemaker@gmail.com,cpatni@ign.com,thnguyen@ign.com"
+  gem.homepage    = "http://github.com/rubyorchard/mongomapper"
+  gem.authors     = ["John Nunemaker", "Chandra Patni", "Thomas Nguyen"]
   gem.version     = MongoMapper::Version
 
   gem.add_dependency('activesupport', '>= 2.3.4')
