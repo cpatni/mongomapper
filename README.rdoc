@@ -14,7 +14,7 @@ Releases are tagged on github and released on gemcutter. Master is pushed to whe
 
 == Install
 
- $ gem install mongo_mapper
+ $ gem install mongo_mapper_ign
 
 == Config Rails environment.rb
 

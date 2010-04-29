@@ -69,6 +69,7 @@ Gem::Specification.new do |s|
      "lib/mongo_mapper/support/find.rb",
      "lib/mongo_mapper/version.rb",
      "mongo_mapper.gemspec",
+     "mongo_mapper_ign.gemspec",
      "performance/read_write.rb",
      "specs.watchr",
      "test/NOTE_ON_TESTING",
