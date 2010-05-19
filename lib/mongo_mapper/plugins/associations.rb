@@ -1,3 +1,4 @@
+# encoding: UTF-8
 module MongoMapper
   module Plugins
     module Associations
@@ -84,7 +85,7 @@ module MongoMapper
 
           proxy
         end
-        
+
         def save_to_collection(options = {})
           super
           associations.each do |association_name, association|
