@@ -1,9 +1,10 @@
+# encoding: UTF-8
 class Array
   def self.to_mongo(value)
     value = value.respond_to?(:lines) ? value.lines : value
     value.to_a
   end
-  
+
   def self.from_mongo(value)
     value || []
   end
@@ -28,7 +29,7 @@ class Boolean
     true => true, 'true' => true, 'TRUE' => true, 'True' => true, 't' => true, 'T' => true, '1' => true, 1 => true, 1.0 => true,
     false => false, 'false' => false, 'FALSE' => false, 'False' => false, 'f' => false, 'F' => false, '0' => false, 0 => false, 0.0 => false, nil => nil
   }
-  
+
   def self.to_mongo(value)
     if value.is_a?(Boolean)
       value
@@ -53,7 +54,7 @@ class Date
   rescue
     nil
   end
-  
+
   def self.from_mongo(value)
     value.to_date if value.present?
   end
@@ -61,7 +62,7 @@ end
 
 class Float
   def self.to_mongo(value)
-    value.to_f
+    value.nil? ? nil : value.to_f
   end
 end
 
@@ -69,7 +70,7 @@ class Hash
   def self.from_mongo(value)
     HashWithIndifferentAccess.new(value || {})
   end
-  
+
   def to_mongo
     self
   end
@@ -90,7 +91,7 @@ class NilClass
   def to_mongo(value)
     value
   end
-  
+
   def from_mongo(value)
     value
   end
@@ -115,11 +116,11 @@ class Object
   def class_def(name, &blk)
     class_eval { define_method(name, &blk) }
   end
-  
+
   def self.to_mongo(value)
     value
   end
-  
+
   def self.from_mongo(value)
     value
   end
@@ -127,15 +128,9 @@ end
 
 class ObjectId
   def self.to_mongo(value)
-    if value.blank?
-      nil
-    elsif value.is_a?(BSON::ObjectID)
-      value
-    else
-      BSON::ObjectID.from_string(value.to_s)
-    end
+    Plucky.to_object_id(value)
   end
-  
+
   def self.from_mongo(value)
     value
   end
@@ -145,7 +140,7 @@ class Set
   def self.to_mongo(value)
     value.to_a
   end
-  
+
   def self.from_mongo(value)
     Set.new(value || [])
   end
@@ -155,25 +150,9 @@ class String
   def self.to_mongo(value)
     value.nil? ? nil : value.to_s
   end
-  
+
   def self.from_mongo(value)
     value.nil? ? nil : value.to_s
-  end
-end
-
-class SymbolOperator
-  attr_reader :field, :operator
-
-  def initialize(field, operator, options={})
-    @field, @operator = field, operator
-  end unless method_defined?(:initialize)
-end
-
-class Symbol
-  %w(gt lt gte lte ne in nin mod all size where exists asc desc).each do |operator|
-    define_method(operator) do
-      SymbolOperator.new(self, operator)
-    end unless method_defined?(operator)
   end
 end
 
@@ -184,11 +163,11 @@ class Time
     else
       time_class = Time.try(:zone).present? ? Time.zone : Time
       time = value.is_a?(Time) ? value : time_class.parse(value.to_s)
-      # Convert time to milliseconds since BSON stores dates with that accurracy, but Ruby uses microseconds
-      Time.at((time.to_f * 1000).round / 1000.0).utc if time
+      # strip milliseconds as Ruby does micro and bson does milli and rounding rounded wrong
+      at(time.to_i).utc if time
     end
   end
-  
+
   def self.from_mongo(value)
     if Time.try(:zone).present? && value.present?
       value.in_time_zone(Time.zone)
@@ -200,11 +179,11 @@ end
 
 class BSON::ObjectID
   alias_method :original_to_json, :to_json
-  
+
   def as_json(options=nil)
     to_s
   end
-  
+
   def to_json(options = nil)
     as_json.to_json
   end

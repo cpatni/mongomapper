@@ -1,9 +1,10 @@
+# encoding: UTF-8
 module MongoMapper
   module Plugins
     module Associations
       class BelongsToPolymorphicProxy < Proxy
         undef_method :object_id
-        
+
         def replace(doc)
           if doc
             doc.save if doc.new?

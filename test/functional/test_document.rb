@@ -261,16 +261,6 @@ class DocumentTest < Test::Unit::TestCase
       end
     end
 
-    should "raise error if trying to find with :all, :first, or :last" do
-      [:all, :first, :last].each do |m|
-        assert_raises(ArgumentError) { @document.find(m) }
-      end
-
-      [:all, :first, :last].each do |m|
-        assert_raises(ArgumentError) { @document.find!(m) }
-      end
-    end
-
     context "(with a single id)" do
       should "work" do
         @document.find(@doc1._id).should == @doc1
@@ -448,7 +438,7 @@ class DocumentTest < Test::Unit::TestCase
         created.last_name.should == 'Nunemaker'
       }.should change { @document.count }.by(1)
     end
-    
+
     should "disregard non-keys when creating, but use them in the query" do
       assert_nothing_raised do
         @document.create(:first_name => 'John', :age => 9)
@@ -476,7 +466,7 @@ class DocumentTest < Test::Unit::TestCase
         created.should be_new
       }.should_not change { @document.count }
     end
-    
+
     should "disregard non-keys when initializing, but use them in the query" do
       assert_nothing_raised do
         @document.create(:first_name => 'John', :age => 9)

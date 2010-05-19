@@ -1,3 +1,4 @@
+# encoding: UTF-8
 module MongoMapper
   module Plugins
     module Associations
@@ -88,7 +89,7 @@ module MongoMapper
           end
           reset
         end
-        
+
         def save_to_collection(options = {})
           @target.each { |doc| doc.save(options) } if @target
         end

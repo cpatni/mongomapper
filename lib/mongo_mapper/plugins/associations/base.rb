@@ -1,3 +1,4 @@
+# encoding: UTF-8
 module MongoMapper
   module Plugins
     module Associations
@@ -16,8 +17,8 @@ module MongoMapper
 
         def class_name
           return @class_name if defined?(@class_name)
-          
-          @class_name = 
+
+          @class_name =
             if cn = options[:class_name]
               cn
             elsif many?
@@ -78,8 +79,8 @@ module MongoMapper
         # hate this, need to revisit
         def proxy_class
           return @proxy_class if defined?(@proxy_class)
-          
-          @proxy_class = 
+
+          @proxy_class =
             if many?
               if klass.embeddable?
                 polymorphic? ? ManyEmbeddedPolymorphicProxy : ManyEmbeddedProxy

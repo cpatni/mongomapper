@@ -1,3 +1,4 @@
+# encoding: UTF-8
 module MongoMapper
   module Plugins
     module Equality
@@ -5,15 +6,15 @@ module MongoMapper
         def ==(other)
           other.is_a?(self.class) && _id == other._id
         end
-        
+
         def eql?(other)
           self == other
         end
-        
+
         def equal?(other)
           object_id === other.object_id
         end
-        
+
         def hash
           _id.hash
         end
