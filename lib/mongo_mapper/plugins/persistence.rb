@@ -15,6 +15,15 @@ module MongoMapper
           @connection
         end
 
+        def slave_connection
+          not_supported_by_embedded
+          raise "Slave connections have not been configured" if MongoMapper.slave_connections.empty?
+          @slave_idx ||= 0
+          conn = MongoMapper.slave_connections[@slave_idx]
+          increment_slave_idx
+          conn
+        end
+        
         def set_database_name(name)
           not_supported_by_embedded
           @database_name = name
@@ -33,6 +42,16 @@ module MongoMapper
             connection.db(database_name)
           end
         end
+        
+        def slave_database
+          not_supported_by_embedded
+          conn = slave_connection
+          if database_name.nil?
+            conn.db(MongoMapper.database.name)
+          else
+            conn.db(database_name)
+          end
+        end
 
         def set_collection_name(name)
           not_supported_by_embedded
@@ -48,10 +67,19 @@ module MongoMapper
           not_supported_by_embedded
           database.collection(collection_name)
         end
+        
+        def slave_collection
+          not_supported_by_embedded
+          slave_database.collection(collection_name)
+        end
 
         private
           def not_supported_by_embedded
             raise Unsupported.new('This is not supported for embeddable documents at this time.') if embeddable?
+          end
+          
+          def increment_slave_idx
+            @slave_idx = @slave_idx + 1 <= MongoMapper.slave_connections.length-1 ? @slave_idx + 1 : 0
           end
       end
 

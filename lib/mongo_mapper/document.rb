@@ -142,6 +142,14 @@ module MongoMapper
       def embeddable?
         false
       end
+      
+      def enslave
+        @enslave = true
+      end
+      
+      def enslave?
+        @enslave ||= false
+      end
 
       def single_collection_inherited?
         keys.key?(:_type) && single_collection_inherited_superclass?

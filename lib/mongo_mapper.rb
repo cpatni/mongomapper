@@ -55,6 +55,16 @@ module MongoMapper
 
     @@database ||= MongoMapper.connection.db(@@database_name)
   end
+  
+  # @api public
+  def self.slave_connections
+    @@slave_connections ||= []
+  end
+  
+  # @api public
+  def self.slave_connections=(slaves = [])
+    @@slave_connections = slaves
+  end
 
   def self.config=(hash)
     @@config = hash

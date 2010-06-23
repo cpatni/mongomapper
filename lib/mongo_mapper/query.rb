@@ -14,7 +14,11 @@ module MongoMapper
       end
 
       def query
-        @query ||= Plucky::Query.new(@model.collection).object_ids(@model.object_id_keys)
+        if @model.enslave?
+          @query ||= Plucky::Query.new(@model.slave_collection).object_ids(@model.object_id_keys)
+        else
+          @query ||= Plucky::Query.new(@model.collection).object_ids(@model.object_id_keys)
+        end
       end
 
       def add_sci_condition
