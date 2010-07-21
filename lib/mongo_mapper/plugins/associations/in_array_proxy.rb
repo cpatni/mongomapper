@@ -40,7 +40,23 @@ module MongoMapper
         end
 
         def all(options={})
-          klass.all(scoped_options(options))
+          random_order = klass.all(scoped_conditions)
+
+          if (scoped_options(options)[:preserve_order])
+            preserve_order = Array.new
+            scoped_conditions[:_id].each do |id|
+              random_order.each do |element|
+                if (id.eql?(element._id))
+                  preserve_order << element
+                  break
+                end
+              end
+            end
+            return_value = preserve_order
+          else
+            return_value = random_order
+          end
+          return return_value
         end
 
         def first(options={})
