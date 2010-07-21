@@ -17,6 +17,11 @@ task :build do
   sh "gem build mongo_mapper.gemspec"
 end
 
+desc 'Builds the ign gem'
+task :build do
+  sh "gem build mongo_mapper_ign.gemspec"
+end
+
 desc 'Builds and installs the gem'
 task :install => :build do
   sh "gem install mongo_mapper-#{MongoMapper::Version}"
